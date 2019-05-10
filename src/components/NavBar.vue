@@ -20,9 +20,6 @@
         <li class="nav-item">
           <router-link class="nav-link" to="about">Справка</router-link>
         </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="register">Регистрация</router-link>
-        </li>
       </ul>
     </div>
   </nav>
