@@ -7,13 +7,19 @@
           <label>{{ labelText }}</label>
         </div>
         <div class="col-sm-3">
-          <select class="form-control" v-model="count">
+          <select class="form-control" v-model="inpval.count">
             <option v-for="n in countSelectItems" v-text="n" :key="n"></option>
           </select>
         </div>
       </div>
-      <span v-for="n in Number(count)">
-        <input v-model="values[n]" class="form-control mt-3" type="text" placeholder='Введите альтернативу'/>
+      <span v-for="n in Number(inpval.count)">
+        <input
+          v-model="inpval.values[n]"
+          class="form-control mt-3"
+          type="text"
+          placeholder="Введите альтернативу"
+          @input="onInput"
+        />
       </span>
     </div>
   </div>
@@ -36,9 +42,11 @@ export default {
   },
   data: function() {
     return {
-      count: 2,
-      values: []
-    };
+      inpval: {
+        count: 2,
+        values: []
+      }
+    }
   },
   computed: {
     countSelectItems: function() {
@@ -46,6 +54,32 @@ export default {
         Array(this.maxCount - this.minCount + 1),
         (x, i) => i + this.minCount
       );
+    }
+  },
+  mounted() {
+    if (localStorage.getItem("values")) {
+      try {
+        this.inpval.values = JSON.parse(localStorage.getItem("values"));
+      } catch (e) {
+        localStorage.removeItem("values");
+      }
+    }
+  },
+  methods: {
+    addValues() {
+      if (!this.newValues) {
+        return;
+      }
+      this.inpval.values.push(this.newValues);
+      this.newValues = "";
+      this.saveValues();
+    },
+    saveValues() {
+      const parsed = JSON.stringify(this.inpval.values);
+      localStorage.setItem("values", parsed);
+    },
+    onInput() {
+      this.$emit("input", this.inpval);
     }
   }
 };

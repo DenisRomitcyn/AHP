@@ -7,18 +7,19 @@
           <label>{{ labelText }}</label>
         </div>
         <div class="col-sm-3">
-          <select class="form-control" v-model="count">
+          <select class="form-control" v-model="inpval.count">
             <option v-for="n in countSelectItems" v-text="n" :key="n"></option>
           </select>
         </div>
       </div>
-      <span v-for="n in Number(count)">
+      <span v-for="(n,index) in Number(inpval.count)">
         <input
-          v-model="values[n]"
+          v-model="inpval.values[index]"
           class="form-control mt-3"
           type="text"
           placeholder="Введите критерий"
-      /></span>
+          @input="onInput"
+        /></span>
     </div>
   </div>
 </template>
@@ -39,8 +40,10 @@ export default {
   },
   data: function() {
     return {
-      count: 2,
-      values: []
+      inpval: {
+        count: 2,
+        values: []
+      }
     };
   },
   computed: {
@@ -49,6 +52,11 @@ export default {
         Array(this.maxCount - this.minCount + 1),
         (x, i) => i + this.minCount
       );
+    }
+  },
+  methods: {
+    onInput () {
+      this.$emit("input", this.inpval);
     }
   }
 };

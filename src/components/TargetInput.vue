@@ -3,7 +3,8 @@
     <div class="col-lg-8 offset-lg-2">
       <label>{{ labelText }}</label>
       <input
-        v-model="Target"
+        @input="onInput"
+        v-model="target"
         class="form-control"
         type="text"
         name="target"
@@ -18,6 +19,16 @@ export default {
   name: "Target",
   props: {
     labelText: String
+  },
+  data() {
+    return {
+      target: ""
+    };
+  },
+  methods: {
+    onInput() {
+      this.$emit("input", this.target);
+    }
   }
 };
 </script>
