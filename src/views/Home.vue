@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <main role="main" class="container mt-5" v-if="currentStep == 0">
+    <main role="main" class="container mt-5" v-if="currentStep === 0">
       <div class="row">
         <div class="col-lg-12">
           <Target v-model="target" label-text="Введите цель:" />
@@ -32,7 +32,7 @@
         </div>
       </div>
     </main>
-    <div v-if="currentStep == 1">
+    <div v-if="currentStep === 1">
       <p class="mt-5">
         Заполните матрицу парных сравнений критериев для цели:
         <b>{{ target }}</b>
@@ -63,7 +63,11 @@
     </div>
 
     <div v-if="currentStep === rowIndex(value_crit.values.length)">
-      <Result :value="value_alt" :value2="value_crit" :loc="tables_data"></Result>
+      <Result
+        :value="value_alt"
+        :value2="value_crit"
+        :loc="tables_data"
+      ></Result>
 
       <button v-on:click="first" type="button" class="btn btn-dark mr-5 mt-5">
         В начало
