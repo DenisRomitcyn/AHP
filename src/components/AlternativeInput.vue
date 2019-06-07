@@ -7,14 +7,14 @@
           <label>{{ labelText }}</label>
         </div>
         <div class="col-sm-3">
-          <select class="form-control" v-model="inpval.count">
+          <select @change="selectChange" class="form-control" v-model="inpval.count">
             <option v-for="n in countSelectItems" v-text="n" :key="n"></option>
           </select>
         </div>
       </div>
-      <span v-for="n in Number(inpval.count)">
+      <span v-for="(n, index) in Number(inpval.count)" :key="n">
         <input
-          v-model="inpval.values[n]"
+          v-model="inpval.values[index]"
           class="form-control mt-3"
           type="text"
           placeholder="Введите альтернативу"
@@ -46,7 +46,7 @@ export default {
         count: 2,
         values: []
       }
-    }
+    };
   },
   computed: {
     countSelectItems: function() {
@@ -66,20 +66,23 @@ export default {
     }
   },
   methods: {
-    addValues() {
-      if (!this.newValues) {
-        return;
-      }
-      this.inpval.values.push(this.newValues);
-      this.newValues = "";
-      this.saveValues();
-    },
-    saveValues() {
-      const parsed = JSON.stringify(this.inpval.values);
-      localStorage.setItem("values", parsed);
-    },
+    // addValues() {
+    //   if (!this.newValues) {
+    //     return;
+    //   }
+    //   this.inpval.values.push(this.newValues);
+    //   this.newValues = "";
+    //   this.saveValues();
+    // },
+    // saveValues() {
+    //   const parsed = JSON.stringify(this.inpval.values);
+    //   localStorage.setItem("values", parsed);
+    // },
     onInput() {
       this.$emit("input", this.inpval);
+    },
+    selectChange (){
+      this.inpval.values = this.inpval.values.slice(0,this.inpval.count)
     }
   }
 };

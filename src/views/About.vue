@@ -1,5 +1,7 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <div class="col-lg-12 mt-5">
+      <h1>СППР МАИ</h1>
+    </div>
   </div>
 </template>

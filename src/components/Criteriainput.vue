@@ -7,7 +7,7 @@
           <label>{{ labelText }}</label>
         </div>
         <div class="col-sm-3">
-          <select class="form-control" v-model="inpval.count">
+          <select @change="selectChange" class="form-control" v-model="inpval.count">
             <option v-for="n in countSelectItems" v-text="n" :key="n"></option>
           </select>
         </div>
@@ -57,6 +57,9 @@ export default {
   methods: {
     onInput () {
       this.$emit("input", this.inpval);
+    },
+    selectChange (){
+      this.inpval.values = this.inpval.values.slice(0,this.inpval.count)
     }
   }
 };

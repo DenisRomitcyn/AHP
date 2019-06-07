@@ -2,9 +2,8 @@
   <div
     :contenteditable="disabled"
     @input="handleInput"
-    @keyup="handleInput"
+    @keypress="noNumber"
     @change="handleInput"
-    type="number"
   ></div>
 </template>
 
@@ -12,6 +11,7 @@
 export default {
   name: "Editable",
   props: ["value", "disabled"],
+
   mounted: function() {
     this.$el.innerText = this.value;
   },
@@ -22,7 +22,15 @@ export default {
   },
   methods: {
     handleInput(e) {
-      this.$emit("input", Number(e.target.innerText));
+      this.$emit("input", e.target.innerText);
+    },
+    noNumber: function(e) {
+      var regex = new RegExp("^[1-9//]?$");
+      var key = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+      if (!regex.test(key)) {
+        event.preventDefault();
+        return false;
+      }
     }
   }
 };

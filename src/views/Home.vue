@@ -26,25 +26,47 @@
       </div>
       <div class="row">
         <div class="col-lg-12">
-          <button
-            @click="addValues"
-            v-on:click="add"
-            type="button"
-            class="btn btn-dark"
-          >
+          <button v-on:click="add" type="button" class="btn btn-dark">
             Далее
           </button>
         </div>
       </div>
     </main>
     <div v-if="currentStep == 1">
-      <p class="mt-5" >Заполните матрицу парных сравнений критериев для цели <b>{{target}}</b></p>
-      <Table :value="value_crit"></Table>
+      <p class="mt-5">
+        Заполните матрицу парных сравнений критериев для цели:
+        <b>{{ target }}</b>
+      </p>
+      <Table v-model="tables_data[0]" :table="value_crit"></Table>
       <button v-on:click="back" type="button" class="btn btn-dark mr-5 mt-5">
         Назад
       </button>
       <button v-on:click="add" type="button" class="btn btn-dark mt-5">
         Далее
+      </button>
+    </div>
+
+    <div v-for="(crit, row) in value_crit.values" :key="row">
+      <div v-if="currentStep === rowIndex(row)">
+        <p class="mt-5">
+          Заполните матрицу парных сравнений альтернатив для критерия:
+          <b>{{ crit }}</b>
+        </p>
+        <Table v-model="tables_data[row + 1]" :table="value_alt"></Table>
+        <button v-on:click="back" type="button" class="btn btn-dark mr-5 mt-5">
+          Назад
+        </button>
+        <button v-on:click="add" type="button" class="btn btn-dark mt-5">
+          Далее
+        </button>
+      </div>
+    </div>
+
+    <div v-if="currentStep === rowIndex(value_crit.values.length)">
+      <Result :value="value_alt" :value2="value_crit" :loc="tables_data"></Result>
+
+      <button v-on:click="first" type="button" class="btn btn-dark mr-5 mt-5">
+        В начало
       </button>
     </div>
   </div>
@@ -56,10 +78,11 @@ import CriteriaInput from "../components/Criteriainput";
 import AlternativeInput from "../components/AlternativeInput";
 import Target from "../components/TargetInput";
 import Table from "../components/Table";
-
+import Result from "../components/Result";
 export default {
   name: "home",
   components: {
+    Result,
     Target,
     AlternativeInput,
     CriteriaInput,
@@ -70,7 +93,8 @@ export default {
       currentStep: 0,
       value_alt: [],
       value_crit: [],
-      target: ""
+      target: "",
+      tables_data: []
     };
   },
   methods: {
@@ -80,11 +104,17 @@ export default {
     back: function() {
       this.currentStep--;
     },
-    onInput: {
-      onInput(a) {
-        this.$emit("input", a);
-      }
+
+    onInput(a) {
+      this.$emit("input", a);
+    },
+    rowIndex: function(n) {
+      return n + 2;
+    },
+    first: function() {
+      this.currentStep = 0;
     }
-  }
+  },
+  computed: {}
 };
 </script>
